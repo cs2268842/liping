@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuli.liping.dao.ProductDao">
+
+    <resultMap id="productResultMap" type="com.jiuli.liping.vo.Product">
+        <id column="productId" property="productId"/> 
+        <result column="tradeName" property="tradeName"/> 
+        <result column="amount" property="amount"/> 
+        <result column="picture" property="picture"/> 
+        <result column="describe" property="describe"/> 
+        <result column="purchasePrice" property="purchasePrice"/> 
+        <result column="marketPrice" property="marketPrice"/> 
+        <result column="supplier" property="supplier"/> 
+        <result column="createTime" property="createTime"/> 
+        <result column="createUser" property="createUser"/> 
+        <result column="goodsState" property="goodsState"/> 
+        <result column="productCategoryId" property="productCategoryId"/> 
+        <result column="productHeat" property="productHeat"/> 
+        <result column="commodityExhibitionId" property="commodityExhibitionId"/> 
+        <result column="productNum" property="productNum"/>
+        <result column="fbk3" property="fbk3"/> 
+        <result column="fbk4" property="fbk4"/> 
+        <result column="fbk5" property="fbk5"/> 
+        <result column="fbk1" property="fbk1"/> 
+
+        
+        
+    </resultMap>
+
+    <sql id="productColumns">
+        product.productId AS "productId",
+        product.tradeName AS "tradeName",
+        product.amount AS "amount",
+        product.picture AS "picture",
+        product.describe AS "describe",
+        product.purchasePrice AS "purchasePrice",
+        product.marketPrice AS "marketPrice",
+        product.supplier AS "supplier",
+        product.createTime AS "createTime",
+        product.createUser AS "createUser",
+        product.goodsState AS "goodsState",
+        product.productCategoryId AS "productCategoryId",
+        product.productHeat AS "productHeat",
+        product.commodityExhibitionId AS "commodityExhibitionId",
+        product.productNum AS "productNum",
+        product.fbk3 AS "fbk3",
+        product.fbk4 AS "fbk4",
+        product.fbk5 AS "fbk5",
+        product.fbk1 AS "fbk1"
+    </sql>
+
+    <sql id="productJoins">
+        
+    </sql>
+
+    <select id="get" resultMap="productResultMap">
+        SELECT
+        <include refid="productColumns" />
+        FROM product <include refid="productJoins" />
+        <where>
+        product.productId = #{id}
+        </where>
+    </select>
+
+    <select id="findList" resultMap="productResultMap">
+        SELECT
+        <include refid="productColumns" />
+        FROM product <include refid="productJoins" />
+        <where>
+        </where>
+    </select>
+
+    <select id="findAllList" resultMap="productResultMap">
+        SELECT
+        <include refid="productColumns" />
+        FROM product <include refid="productJoins" />
+        <where>
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO product(
+            tradeName,
+            amount,
+            describe,
+            purchasePrice,
+            marketPrice,
+            supplier,
+            createTime,
+            createUser,
+            goodsState,
+            productCategoryId,
+            productHeat,
+            commodityExhibitionId
+        )
+        VALUES (
+            #{productId},
+            #{tradeName},
+            #{amount},
+            #{describe},
+            #{purchasePrice},
+            #{marketPrice},
+            #{supplier},
+            #{createTime},
+            #{createUser},
+            #{goodsState},
+            #{productCategoryId},
+            #{productHeat},
+            #{commodityExhibitionId}
+        )
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO product(
+            productId,
+            tradeName,
+            amount,
+            picture,
+            describe,
+            purchasePrice,
+            marketPrice,
+            supplier,
+            createTime,
+            createUser,
+            goodsState,
+            productCategoryId,
+            productHeat,
+            commodityExhibitionId,
+        productNum,
+            fbk3,
+            fbk4,
+            fbk5,
+            fbk1
+        )
+        VALUES
+        <foreach collection ="list" item="product" separator =",">
+        (
+            #{product.productId},
+            #{product.tradeName},
+            #{product.amount},
+            #{product.picture},
+            #{product.describe},
+            #{product.purchasePrice},
+            #{product.marketPrice},
+            #{product.supplier},
+            #{product.createTime},
+            #{product.createUser},
+            #{product.goodsState},
+            #{product.productCategoryId},
+            #{product.productHeat},
+            #{product.commodityExhibitionId},
+            #{product.productNum},
+            #{product.fbk3},
+            #{product.fbk4},
+            #{product.fbk5},
+            #{product.fbk1}
+        )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE product SET
+        productId = #{productId},
+        tradeName = #{tradeName},
+        amount = #{amount},
+        picture = #{picture},
+        describe = #{describe},
+        purchasePrice = #{purchasePrice},
+        marketPrice = #{marketPrice},
+        supplier = #{supplier},
+        createTime = #{createTime},
+        createUser = #{createUser},
+        goodsState = #{goodsState},
+        productCategoryId = #{productCategoryId},
+        productHeat = #{productHeat},
+        commodityExhibitionId = #{commodityExhibitionId},
+        productNum = #{productNum},
+        fbk3 = #{fbk3},
+        fbk4 = #{fbk4},
+        fbk5 = #{fbk5},
+        fbk1 = #{fbk1}
+        WHERE productId = #{productId}
+    </update>
+
+    <update id="delete">
+        DELETE FROM product
+        WHERE productId = #{productId}
+    </update>
+
+    <select id="getByName" resultMap="productResultMap">
+        SELECT
+        <include refid="productColumns" />
+        FROM product <include refid="productJoins" />
+        <where>
+            productNum = #{productNum}
+        </where>
+    </select>
+
+    <select id="getByProjectName" resultType="int">
+        SELECT
+        count(*)
+        FROM product
+        <where>
+            tradeName = #{tradeName}
+        </where>
+    </select>
+</mapper>

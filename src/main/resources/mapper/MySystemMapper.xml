@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuli.liping.dao.MySystemDao">
+
+    <resultMap id="mySystemResultMap" type="com.jiuli.liping.vo.MySystem">
+        <id column="sysId" property="sysId"/> 
+        <result column="oneNum" property="oneNum"/> 
+        <result column="oneName" property="oneName"/> 
+        <result column="twoNum" property="twoNum"/> 
+        <result column="twoName" property="twoName"/> 
+
+        
+        
+    </resultMap>
+
+    <sql id="mySystemColumns">
+        mySystem.sysId AS "sysId",
+        mySystem.oneNum AS "oneNum",
+        mySystem.oneName AS "oneName",
+        mySystem.twoNum AS "twoNum",
+        mySystem.twoName AS "twoName"
+    </sql>
+
+    <sql id="mySystemJoins">
+        
+    </sql>
+
+    <select id="get" resultMap="mySystemResultMap">
+        SELECT
+        <include refid="mySystemColumns" />
+        FROM mySystem <include refid="mySystemJoins" />
+        <where>
+        mySystem.sysId = #{id}
+        </where>
+    </select>
+
+    <select id="findList" resultMap="mySystemResultMap">
+        SELECT
+        <include refid="mySystemColumns" />
+        FROM mySystem <include refid="mySystemJoins" />
+        <where>
+        </where>
+    </select>
+
+    <select id="findAllList" resultMap="mySystemResultMap">
+        SELECT
+        <include refid="mySystemColumns" />
+        FROM mySystem <include refid="mySystemJoins" />
+        <where>
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO mySystem(
+            sysId,
+            oneNum,
+            oneName,
+            twoNum,
+            twoName
+        )
+        VALUES (
+            #{sysId},
+            #{oneNum},
+            #{oneName},
+            #{twoNum},
+            #{twoName}
+        )
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO mySystem(
+            sysId,
+            oneNum,
+            oneName,
+            twoNum,
+            twoName
+        )
+        VALUES
+        <foreach collection ="list" item="mySystem" separator =",">
+        (
+            #{mySystem.sysId},
+            #{mySystem.oneNum},
+            #{mySystem.oneName},
+            #{mySystem.twoNum},
+            #{mySystem.twoName}
+        )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE mySystem SET
+        sysId = #{sysId},
+        oneNum = #{oneNum},
+        oneName = #{oneName},
+        twoNum = #{twoNum},
+        twoName = #{twoName}
+        WHERE sysId = #{sysId}
+    </update>
+
+    <update id="delete">
+        DELETE FROM mySystem
+        WHERE sysId = #{sysId}
+    </update>
+
+
+    <resultMap id="mySystemResultMap2" type="com.jiuli.liping.vo.MySystem">
+        <id column="sysId" property="sysId"/>
+        <result column="oneNum" property="oneNum"/>
+        <result column="oneName" property="oneName"/>
+        <result column="twoNum" property="twoNum"/>
+        <result column="twoName" property="twoName"/>
+        <collection property="productList" javaType="java.util.ArrayList" ofType="com.jiuli.liping.vo.Product">
+            <id column="productId" property="productId"/>
+            <result column="tradeName" property="tradeName"/>
+            <result column="amount" property="amount"/>
+            <result column="picture" property="picture"/>
+            <result column="describe" property="describe"/>
+            <result column="purchasePrice" property="purchasePrice"/>
+            <result column="marketPrice" property="marketPrice"/>
+            <result column="supplier" property="supplier"/>
+            <result column="createTime" property="createTime"/>
+            <result column="createUser" property="createUser"/>
+            <result column="goodsState" property="goodsState"/>
+            <result column="productCategoryId" property="productCategoryId"/>
+            <result column="productHeat" property="productHeat"/>
+            <result column="commodityExhibitionId" property="commodityExhibitionId"/>
+            <result column="productNum" property="productNum"/>
+            <result column="fbk3" property="fbk3"/>
+            <result column="fbk4" property="fbk4"/>
+            <result column="fbk5" property="fbk5"/>
+            <result column="fbk1" property="fbk1"/>
+        </collection>
+    </resultMap>
+    <select id="getProductList" resultMap="mySystemResultMap2">
+        select m.*,p.*
+        from mySystem m left join product p on m.oneNum = p.productCategoryId
+    </select>
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiuli.liping.dao.UserlistDao">
+
+    <resultMap id="userlistResultMap" type="com.jiuli.liping.vo.Userlist">
+        <id column="userId" property="userId"/> 
+        <result column="wechatId" property="wechatId"/> 
+        <result column="wechatName" property="wechatName"/> 
+        <result column="userName" property="userName"/>
+        <result column="userNum" property="userNum"/>
+        <result column="departmentDescribe" property="departmentDescribe"/> 
+        <result column="jurisdictionId" property="jurisdictionId"/> 
+        <result column="creatTime" property="creatTime"/>
+        <result column="avatar" property="avatar"/>
+        <result column="thumb_avatar" property="thumb_avatar"/>
+        <result column="mobile" property="mobile"/>
+        <result column="lastTime" property="lastTime"/>
+    </resultMap>
+
+    <sql id="userlistColumns">
+        userlist.userId AS "userId",
+        userlist.wechatId AS "wechatId",
+        userlist.wechatName AS "wechatName",
+        userlist.userName AS "userName",
+        userlist.userNum AS "userNum",
+        userlist.departmentDescribe AS "departmentDescribe",
+        userlist.jurisdictionId AS "jurisdictionId",
+        userlist.creatTime AS "creatTime",
+        userlist.avatar AS "avatar",
+        userlist.thumb_avatar AS "thumb_avatar",
+        userlist.mobile AS "mobile",
+        userlist.lastTime AS "lastTime"
+    </sql>
+
+    <sql id="userlistJoins">
+        
+    </sql>
+
+    <select id="get" resultMap="userlistResultMap">
+        SELECT
+        <include refid="userlistColumns" />
+        FROM userlist <include refid="userlistJoins" />
+        <where>
+        userlist.userId = #{id}
+        </where>
+    </select>
+
+    <select id="findList" resultMap="userlistResultMap">
+        SELECT
+        <include refid="userlistColumns" />
+        FROM userlist <include refid="userlistJoins" />
+        <where>
+        </where>
+    </select>
+
+    <select id="findAllList" resultMap="userlistResultMap">
+        SELECT
+        <include refid="userlistColumns" />
+        FROM userlist <include refid="userlistJoins" />
+        <where>
+        </where>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO userlist(
+            wechatId,
+            userName,
+            userNum,
+            departmentDescribe,
+            jurisdictionId,
+            creatTime,
+            avatar,
+            thumb_avatar,
+            mobile,
+            lastTime
+        )
+        VALUES (
+            #{wechatId},
+            #{userName},
+            #{userNum},
+            #{departmentDescribe},
+            #{jurisdictionId},
+            #{creatTime},
+            #{avatar},
+            #{thumb_avatar},
+            #{mobile},
+            #{lastTime}
+        )
+    </insert>
+
+    <insert id="insertBatch">
+        INSERT INTO userlist(
+            userId,
+            wechatId,
+            wechatName,
+        userName,
+        userNum,
+            departmentDescribe,
+            jurisdictionId,
+            creatTime
+        )
+        VALUES
+        <foreach collection ="list" item="userlist" separator =",">
+        (
+            #{userlist.userId},
+            #{userlist.wechatId},
+            #{userlist.wechatName},
+            #{userlist.userName},
+            #{userlist.userNum},
+            #{userlist.departmentDescribe},
+            #{userlist.jurisdictionId},
+            #{userlist.creatTime}
+        )
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE userlist SET
+        wechatId = #{wechatId},
+        userName = #{userName},
+        userNum = #{userNum},
+        departmentDescribe = #{departmentDescribe},
+        avatar = #{avatar},
+        thumb_avatar =  #{thumb_avatar},
+        mobile = #{mobile},
+        lastTime = #{lastTime}
+        WHERE wechatId = #{wechatId}
+    </update>
+
+    <update id="delete">
+        DELETE FROM userlist
+        WHERE userId = #{userId}
+    </update>
+
+    <select id="getCount" resultType="int">
+        SELECT
+        count(*)
+        FROM userlist
+        <where>
+            userlist.wechatId = #{wechatId}
+        </where>
+    </select>
+
+    <select id="getDepartMentByHR" resultMap="userlistResultMap">
+         SELECT departmentDescribe FROM openquery([192.168.5.31],'select m.title as departmentDescribe
+from [HRDB].dbo.au_Employee c left join [HRDB].dbo.md_Organization m on c.OrgID=m.OrgID where c.EmpNo=''${position}''')
+    </select>
+</mapper>
